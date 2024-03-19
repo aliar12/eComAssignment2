@@ -4,10 +4,6 @@ namespace app\core;
 class App{
     private $routes = [];
 
-/*  'Friend/add/{id1}/{id2}' => 'Person,edit'*/
-/*  'Friend/add/(?<id1>[^\/])/(?<id2>[^\/])' => 'Person,edit'*/
-/*  Friend/add/123/456*/
-
     public function addRoute($url,$handler){
         $url = preg_replace('/{([^\/]+)}/', '(?<$1>[^\/]+)', $url);
         $this->routes[$url] = $handler;

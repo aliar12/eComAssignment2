@@ -17,147 +17,59 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `ecommerce`
---
+-- Create database if not exists
+CREATE DATABASE IF NOT EXISTS `ecommerce` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `ecommerce`;
 
--- --------------------------------------------------------
+-- Create user table
+CREATE TABLE IF NOT EXISTS `user` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `password_hash` varchar(60) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Table structure for table `profile`
---
-
-CREATE TABLE `profile` (
-  `profile_id` int(11) NOT NULL,
+-- Create profile table
+CREATE TABLE IF NOT EXISTS `profile` (
+  `profile_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `first_name` varchar(50) NOT NULL,
-  `middle_name` varchar(50) NOT NULL,
-  `last_name` varchar(50) NOT NULL
+  `middle_name` varchar(50) DEFAULT NULL,
+  `last_name` varchar(50) NOT NULL,
+  PRIMARY KEY (`profile_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `profile_to_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `publication`
---
-
-CREATE TABLE `publication` (
-  `publication_id` int(11) NOT NULL,
+-- Create publication table
+CREATE TABLE IF NOT EXISTS `publication` (
+  `publication_id` int(11) NOT NULL AUTO_INCREMENT,
   `profile_id` int(11) NOT NULL,
-  `publication_title` varchar(50) NOT NULL,
-  `publication_text,` varchar(400) NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `publication_status` varchar(10) NOT NULL
+  `publication_title` varchar(255) NOT NULL,
+  `publication_text` text NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `publication_status` enum('public','private') NOT NULL DEFAULT 'public',
+  PRIMARY KEY (`publication_id`),
+  KEY `profile_id` (`profile_id`),
+  CONSTRAINT `publication_profile_fk` FOREIGN KEY (`profile_id`) REFERENCES `profile` (`profile_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `publication_comment`
---
-
-CREATE TABLE `publication_comment` (
-  `publication_comment_id` int(11) NOT NULL,
+-- Create publication_comment table
+CREATE TABLE IF NOT EXISTS `publication_comment` (
+  `publication_comment_id` int(11) NOT NULL AUTO_INCREMENT,
   `profile_id` int(11) NOT NULL,
   `publication_id` int(11) NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `comment_text` text NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`publication_comment_id`),
+  KEY `profile_id` (`profile_id`),
+  KEY `publication_id` (`publication_id`),
+  CONSTRAINT `comment_profile_fk` FOREIGN KEY (`profile_id`) REFERENCES `profile` (`profile_id`),
+  CONSTRAINT `comment_publication_fk` FOREIGN KEY (`publication_id`) REFERENCES `publication` (`publication_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `user`
---
-
-CREATE TABLE `user` (
-  `user_id` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password_hash` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `profile`
---
-ALTER TABLE `profile`
-  ADD PRIMARY KEY (`profile_id`),
-  ADD KEY `user_Profile_FK` (`user_id`);
-
---
--- Indexes for table `publication`
---
-ALTER TABLE `publication`
-  ADD PRIMARY KEY (`publication_id`),
-  ADD KEY `publication_Profile_FK` (`profile_id`);
-
---
--- Indexes for table `publication_comment`
---
-ALTER TABLE `publication_comment`
-  ADD PRIMARY KEY (`publication_comment_id`),
-  ADD KEY `Comment_Profile_FK` (`profile_id`),
-  ADD KEY `Comment_Publication_FK` (`publication_id`);
-
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`user_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `profile`
---
-ALTER TABLE `profile`
-  MODIFY `profile_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `publication`
---
-ALTER TABLE `publication`
-  MODIFY `publication_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `publication_comment`
---
-ALTER TABLE `publication_comment`
-  MODIFY `publication_comment_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `user`
---
-ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `profile`
---
-ALTER TABLE `profile`
-  ADD CONSTRAINT `user_Profile_FK` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
-
---
--- Constraints for table `publication`
---
-ALTER TABLE `publication`
-  ADD CONSTRAINT `publication_Profile_FK` FOREIGN KEY (`profile_id`) REFERENCES `profile` (`profile_id`);
-
---
--- Constraints for table `publication_comment`
---
-ALTER TABLE `publication_comment`
-  ADD CONSTRAINT `Comment_Profile_FK` FOREIGN KEY (`profile_id`) REFERENCES `profile` (`profile_id`),
-  ADD CONSTRAINT `Comment_Publication_FK` FOREIGN KEY (`publication_id`) REFERENCES `publication` (`publication_id`);
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
