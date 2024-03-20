@@ -9,9 +9,12 @@ class Profile extends \app\core\Controller{
 	public function index(){
 		$profile = new \app\models\Profile();
 		$profile = $profile->getForUser($_SESSION['user_id']);
+		$publication = new \app\models\Publication();
+		echo($_SESSION['profile_id']);
+		$publications = $publication->getForUser($_SESSION['profile_id']);
 
 		//redirect a user that has no profile to the profile creation URL
-		$this->view('Profile/index',$profile);
+		$this->view('Profile/index',$profile,$publications);
 	}
 
 	public function create(){
@@ -21,6 +24,7 @@ class Profile extends \app\core\Controller{
 			//populate it
 			$profile->user_id = $_SESSION['user_id'];
 			$profile->first_name = $_POST['first_name'];
+			$profile->middle_name = $_POST['middle_name'];
 			$profile->last_name = $_POST['last_name'];
 			//insert it
 			$profile->insert();
@@ -38,7 +42,9 @@ class Profile extends \app\core\Controller{
 		if($_SERVER['REQUEST_METHOD'] === 'POST'){//data is submitted through method POST
 			//make a new profile object
 			//populate it
+			$_SESSION['profile_id'] = $profile->profile_id;
 			$profile->first_name = $_POST['first_name'];
+			$profile->middle_name = $_POST['middle_name'];
 			$profile->last_name = $_POST['last_name'];
 			//update it
 			$profile->update();

@@ -43,6 +43,7 @@ class User extends \app\core\Controller{
 		echo 'You are safe. You are in a secure location.';
 	}
 
+
 	function register(){
 		//display the form and process the registration
 		if($_SERVER['REQUEST_METHOD'] === 'POST'){

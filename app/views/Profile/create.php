@@ -8,13 +8,13 @@
 	<div class='container'>
 		<form method='post' action=''>
 			<div class="form-group">
-				<label>Title :<input type="text" class="form-control" name="publication_title" placeholder="Jon" /></label>
+				<label>First name:<input type="text" class="form-control" name="first_name" placeholder="Jon" /></label>
 			</div>
 			<div class="form-group">
-				<label>Content:<input type="text" class="form-control" name="publication_text" placeholder="Doe" /></label>
+				<label>Middle name:<input type="text" class="form-control" name="middle_name" placeholder="Doe" /></label>
 			</div>
 			<div class="form-group">
-				<label>Publication Status(public or private):<input type="text" class="form-control" name="publication_status" placeholder="Doe" /></label>
+				<label>Last name:<input type="text" class="form-control" name="last_name" placeholder="Doe" /></label>
 			</div>
 
 			<div class="form-group">

@@ -8,17 +8,17 @@
 	<div class='container'>
 		<form method='post' action=''>
 			<div class="form-group">
-				<label>Title :<input type="text" class="form-control" name="publication_title" placeholder="Jon" /></label>
+				<label>Title:<input type="text" class="form-control" name="publication_title" placeholder="Jon" value='<?= $data->publication_title ?>' /></label>
 			</div>
 			<div class="form-group">
-				<label>Content:<input type="text" class="form-control" name="publication_text" placeholder="Doe" /></label>
+				<label>Content:<input type="text" class="form-control" name="publication_text" placeholder="Doe" value='<?= $data->publication_text ?>' /></label>
 			</div>
 			<div class="form-group">
-				<label>Publication Status(public or private):<input type="text" class="form-control" name="publication_status" placeholder="Doe" /></label>
+				<label>Status:<input type="text" class="form-control" name="publication_status" placeholder="Doe" value='<?= $data->publication_status?>' /></label>
 			</div>
-
 			<div class="form-group">
-				<input type="submit" name="action" value="Record my profile" /> 
+				<input type="submit" name="action" value="Record my Post" /> 
+				<a href='/Publication/index'>Cancel</a>
 			</div>
 		</form>
 	</div>
