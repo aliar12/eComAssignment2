@@ -5,7 +5,6 @@ namespace app\controllers;
 #[\app\filters\Login]
 class Profile extends \app\core\Controller{
 
-<<<<<<< Updated upstream
 	#[\app\filters\HasProfile]
 	public function index(){
 		$profile = new \app\models\Profile();
