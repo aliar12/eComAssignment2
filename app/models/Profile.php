@@ -10,6 +10,7 @@ class Profile extends \app\core\Model{
 	public $middle_name;
 	public $last_name;
 
+
 	//CRUD
 
 	//create
@@ -22,16 +23,8 @@ class Profile extends \app\core\Model{
 			'middle_name'=>$this->middle_name,
 			'last_name'=>$this->last_name]
 		);
-		$SQL = 'SELECT profile_id FROM profile WHERE user_id = :user_id';
-		$STMT = self::$_conn->prepare($SQL);
-		$STMT->execute(
-			['user_id'=>$user_id]
-		);
-		//there is a mistake in the next line
-		$STMT->setFetchMode(PDO::FETCH_CLASS,'app\models\profile');//set the type of data returned by fetches
-		$_SESSION['profile_id'] = $STMT->fetch();
-		return $STMT->fetch();//return (what should be) the only record
 	}
+
 
 	//read
 	public function getForUser($user_id){

@@ -1,73 +1,68 @@
 <?php
 namespace app\controllers;
 
-//applying the Login condition to the whole class
-#[\app\filters\Login]
 class Publication extends \app\core\Controller{
 
-	#[\app\filters\HasProfile]
-	public function index(){
-		$publication = new \app\models\Publication();
-		$publication = $publication->getForUser($_SESSION['profile_id']);
+    public function index(){
+        $publicationModel = new \app\models\Publication();
+        $publications = $publicationModel->getAll();
 
-		//redirect a user that has no profile to the profile creation URL
-		$this->view('Publication/index',$publication);
-	}
+        $this->view('Publication/index', ['publications' => $publications]);
+    }
 
-	public function create(){
-		if($_SERVER['REQUEST_METHOD'] === 'POST'){//data is submitted through method POST
-			//make a new profile object
-			$publication = new \app\models\Publication();
-			//populate it
-			$publication->profile_id = $_SESSION['profile_id'];
-			$publication->publication_title = $_POST['publication_title'];
-			$publication->publication_text = $_POST['publication_text'];
-			$publication->publication_status = $_POST['publication_status'];
-			//insert it
-			$publication->insert();
-			//redirect
-			header('location:/Publication/index');
-		}else{
-			$this->view('Publication/create');
-		}
-	}
+    public function create(){
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $publicationModel = new \app\models\Publication();
+            $publicationModel->profile_id = $_SESSION['profile_id'];
+            $publicationModel->publication_title = $_POST['publication_title'];
+            $publicationModel->publication_text = $_POST['publication_text'];
+            $publicationModel->publication_status = $_POST['publication_status'];
+            $publicationModel->insert();
+            header('Location: /Publication/index');
+            exit;
+        } else {
+            $this->view('Publication/create');
+        }
+    }
 
-	public function modify(){
-		$publication = new \app\models\Publication();
-		$publication = $publication->getForUser($_SESSION['profile_id']);
+    public function edit($publication_id){
+        $publicationModel = new \app\models\Publication();
+        $publication = $publicationModel->get($publication_id);
 
-		if($_SERVER['REQUEST_METHOD'] === 'POST'){//data is submitted through method POST
-			//make a new profile object
-			//populate it
-			$publication->profile_id = $_SESSION['profile_id'];
-			$publication->publication_title = $_POST['publication_title'];
-			$publication->publication_text = $_POST['publication_text'];
-			$publication->publication_status = $_POST['publication_status'];
-			//update it
-			$publication->update();
-			//redirect
-			header('location:/Publication/index');
-		}else{
-			$this->view('Publication/modify', $publication);
-		}
-	}
+        if(!$publication) {
+            // Handle case when publication is not found
+            header('Location: /Publication/index');
+            exit;
+        }
 
-	public function delete(){
-		//present the user with a form to confirm the deletion that is requested and delete if the form is submitted
-/*		//make sure that the user is logged in
-		if(!isset($_SESSION['user_id'])){
-			header('location:/User/login');
-			return;
-		}
-*/
-		$publication = new \app\models\Publication();
-		$publication = $publication->getForUser($_SESSION['profile_id']);
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $publication->publication_title = $_POST['publication_title'];
+            $publication->publication_text = $_POST['publication_text'];
+            $publication->publication_status = $_POST['publication_status'];
+            $publication->update();
+            header('Location: /Publication/index');
+            exit;
+        } else {
+            $this->view('Publication/edit', ['publication' => $publication]);
+        }
+    }
 
-		if($_SERVER['REQUEST_METHOD'] === 'POST'){
-			$publication->delete();
-			header('location:/Publication/index');
-		}else{
-			$this->view('Publication/delete',$publication);
-		}
-	}
+    public function delete($publication_id){
+        $publicationModel = new \app\models\Publication();
+        $publication = $publicationModel->get($publication_id);
+
+        if(!$publication) {
+            // Handle case when publication is not found
+            header('Location: /Publication/index');
+            exit;
+        }
+
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $publication->delete();
+            header('Location: /Publication/index');
+            exit;
+        } else {
+            $this->view('Publication/delete', ['publication' => $publication]);
+        }
+    }
 }
