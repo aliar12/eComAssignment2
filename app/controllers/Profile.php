@@ -5,15 +5,6 @@ namespace app\controllers;
 #[\app\filters\Login]
 class Profile extends \app\core\Controller{
 
-	#[\app\filters\HasProfile]
-	public function index(){
-		$profile = new \app\models\Profile();
-		$profile = $profile->getForUser($_SESSION['user_id']);
-
-		//redirect a user that has no profile to the profile creation URL
-		$this->view('Profile/index',$profile);
-	}
-=======
     #[\app\filters\HasProfile]
     public function index(){
         $profile = new \app\models\Profile();
@@ -22,28 +13,13 @@ class Profile extends \app\core\Controller{
         // Fetch publications for the current profile
         $publication = new \app\models\Publication();
         $publications = $publication->getForUser($profile->profile_id);
->>>>>>> Stashed changes
+
 
         // Pass profile and publications data to the view
         $this->view('Profile/index', ['profile' => $profile, 'publications' => $publications]);
     }
 	public function create(){
-<<<<<<< Updated upstream
-		if($_SERVER['REQUEST_METHOD'] === 'POST'){//data is submitted through method POST
-			//make a new profile object
-			$profile = new \app\models\Profile();
-			//populate it
-			$profile->user_id = $_SESSION['user_id'];
-			$profile->first_name = $_POST['first_name'];
-			$profile->last_name = $_POST['last_name'];
-			//insert it
-			$profile->insert();
-			//redirect
-			header('location:/Profile/index');
-		}else{
-			$this->view('Profile/create');
-		}
-=======
+
 	    if($_SERVER['REQUEST_METHOD'] === 'POST'){//data is submitted through method POST
 	        // Make a new profile object
 	        $profile = new \app\models\Profile();
@@ -63,7 +39,7 @@ class Profile extends \app\core\Controller{
 	    }else{
 	        $this->view('Profile/create');
 	    }
->>>>>>> Stashed changes
+
 	}
     public function modify(){
         $profile = new \app\models\Profile();
@@ -83,25 +59,10 @@ class Profile extends \app\core\Controller{
         }
     }
 
-<<<<<<< Updated upstream
-		if($_SERVER['REQUEST_METHOD'] === 'POST'){//data is submitted through method POST
-			//make a new profile object
-			//populate it
-			$profile->first_name = $_POST['first_name'];
-			$profile->last_name = $_POST['last_name'];
-			//update it
-			$profile->update();
-			//redirect
-			header('location:/Profile/index');
-		}else{
-			$this->view('Profile/modify', $profile);
-		}
-	}
-=======
     public function delete(){
         $profile = new \app\models\Profile();
         $profile = $profile->getForUser($_SESSION['user_id']);
->>>>>>> Stashed changes
+
 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $profile->delete();
@@ -110,4 +71,6 @@ class Profile extends \app\core\Controller{
             $this->view('Profile/delete',$profile);
         }
     }
+
+
 }

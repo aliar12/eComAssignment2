@@ -8,12 +8,9 @@ $this->addRoute('User/securePlace' , 'Profile,index');
 $this->addRoute('Profile/index' , 'Profile,index');
 $this->addRoute('Profile/create' , 'Profile,create');
 $this->addRoute('Profile/modify' , 'Profile,modify');
-<<<<<<< Updated upstream
-$this->addRoute('Profile/delete' , 'Profile,delete');
-=======
 $this->addRoute('Profile/delete' , 'Profile,delete');
 $this->addRoute('Publication/create' , 'Publication,create');
 $this->addRoute('Publication/index' , 'Publication,index');
 $this->addRoute('Publication/delete' , 'Publication,delete');
 $this->addRoute('Publication/edit' , 'Publication,edit');
->>>>>>> Stashed changes
+
